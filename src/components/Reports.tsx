@@ -14,10 +14,10 @@ import { Card, Page, Text } from '@shopify/polaris';
 const Reports = () => {
   const data = [
     { name: 'Jan', income: 4000, expense: 2300 },
-    { name: 'Feb', income: 4000, expense: 1830 },
-    { name: 'Mar', income: 4000, expense: 4200 },
-    { name: 'Apr', income: 4000, expense: 3000 },
-    { name: 'May', income: 4000, expense: 2700 },
+    { name: 'Feb', income: 2500, expense: 1830 },
+    { name: 'Mar', income: 3000, expense: 4200 },
+    { name: 'Apr', income: 5000, expense: 3000 },
+    { name: 'May', income: 1500, expense: 2700 },
   ];
 
   return (

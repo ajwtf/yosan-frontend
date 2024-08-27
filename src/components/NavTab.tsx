@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 
-import { Box, Card, Page, Tabs, Text } from '@shopify/polaris';
+import { NavLink } from 'react-router-dom';
+
+import { Card, Link, Page, Tabs } from '@shopify/polaris';
 
 const NavTab = () => {
   const [selected, setSelected] = useState(0);
@@ -13,33 +15,63 @@ const NavTab = () => {
   const tabs = [
     {
       id: 'dashboard-1',
-      content: 'Dashboard',
+      content: (
+        <NavLink to='/'>
+          {/* <Icon source={DashboardIcon} /> */}
+          <span>Dashboard</span>
+        </NavLink>
+      ),
       accessibilityLabel: 'Dashboard',
       panelID: 'dashboard-content-1',
     },
     {
       id: 'income-1',
-      content: 'Income',
+      content: (
+        <NavLink to='/income'>
+          {/* <Icon source={IncomeIcon} /> */}
+          <span>Income</span>
+        </NavLink>
+      ),
       panelID: 'income-content-1',
     },
     {
       id: 'expense-1',
-      content: 'Expense',
+      content: (
+        <NavLink to='/expense'>
+          {/* <Icon source={ExpenseIcon} /> */}
+          <span>Expense</span>
+        </NavLink>
+      ),
       panelID: 'expense-content-1',
     },
     {
       id: 'budget-1',
-      content: 'Budget',
+      content: (
+        <NavLink to='/budget'>
+          {/* <Icon source={BudgetIcon} /> */}
+          <span>Budget</span>
+        </NavLink>
+      ),
       panelID: 'budget-content-1',
     },
     {
       id: 'reports-1',
-      content: 'Reports',
+      content: (
+        <NavLink to='/reports'>
+          {/* {<Icon source={ReportsIcon} />} */}
+          <span>Reports</span>
+        </NavLink>
+      ),
       panelID: 'reports-content-1',
     },
     {
       id: 'user-1',
-      content: 'User',
+      content: (
+        <Link url='/user'>
+          {/* <Icon source={UserIcon} /> */}
+          <span>User</span>
+        </Link>
+      ),
       panelID: 'user-content-1',
     },
   ];
@@ -47,15 +79,7 @@ const NavTab = () => {
   return (
     <Page>
       <Card>
-        <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange}>
-          <Box paddingBlockStart='200'>
-            <Text as='h3' variant='headingMd'>
-              {tabs[selected].content}
-            </Text>
-          </Box>
-
-          <Text as='h5'>Tab Index: {selected}</Text>
-        </Tabs>
+        <Tabs tabs={tabs} selected={selected} onSelect={handleTabChange} />
       </Card>
     </Page>
   );

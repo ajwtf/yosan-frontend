@@ -2,7 +2,14 @@ import { ReactNode } from 'react';
 
 import { Provider } from 'react-redux';
 
-import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  configureStore,
+  createAsyncThunk,
+  createSlice,
+  PayloadAction,
+} from '@reduxjs/toolkit';
+
+import * as api from '../utils/api';
 
 const initialState = {
   user: null,
@@ -19,14 +26,38 @@ const userSlice = createSlice({
   },
 });
 
+export const fetchIncomes = createAsyncThunk(
+  'incomes/fetchIncomes',
+  async () => {
+    const { data } = await api.fetchIncomes();
+    return data;
+  },
+);
+
+export const addNewIncome = createAsyncThunk(
+  'incomes/addNewIncome',
+  async (incomeData: any) => {
+    const { data } = await api.addIncome(incomeData);
+    return data;
+  },
+);
+
 const incomeSlice = createSlice({
+  // initialState: initialState.incomes,
+  /*   addIncome: (state, action: PayloadAction<any>) => {
+        state.push(action.payload);
+        },
+        setIncomes: (state, action: PayloadAction<any[]>) => action.payload, */
   name: 'incomes',
-  initialState: initialState.incomes,
-  reducers: {
-    addIncome: (state, action: PayloadAction<any>) => {
+  initialState: [],
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchIncomes.fulfilled, (state, action) => {
+      return action.payload;
+    });
+    builder.addCase(addNewIncome.fulfilled, (state, action) => {
       state.push(action.payload);
-    },
-    setIncomes: (state, action: PayloadAction<any[]>) => action.payload,
+    });
   },
 });
 
@@ -62,6 +93,8 @@ export const { setUser } = userSlice.actions;
 export const { addIncome, setIncomes } = incomeSlice.actions;
 export const { addExpense, setExpenses } = expenseSlice.actions;
 export const { setBudget } = budgetSlice.actions;
+
+export default incomeSlice.reducer;
 
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
   return <Provider store={store}>{children}</Provider>;
