@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+
+import { Form, Formik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Button,
@@ -13,90 +16,110 @@ import {
   TextField,
 } from '@shopify/polaris';
 
+import { RootState } from '../context';
+import { addNewExpense, fetchExpenses } from '../context/expenseSlice';
+import { expenseValidationSchema } from '../utils/validators';
+
 const ExpenseTracker = () => {
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('Food');
-  const [date, setDate] = useState('');
-  const [description, setDescription] = useState('');
-  const [file, setFile] = useState<File | null>(null);
+  const dispatch = useDispatch();
+  const expenses = useSelector((state: RootState) => state.expenses);
+
+  useEffect(() => {
+    dispatch(fetchExpenses());
+  }, [dispatch]);
 
   const categories = [
-    { label: 'Rent', value: 'rent' },
-    { label: 'Food', value: 'food' },
-    { label: 'Entertainment', value: 'entertainment' },
-    { label: 'Touka', value: 'touka' },
+    { label: 'Rent', value: 'Rent' },
+    { label: 'Food', value: 'Food' },
+    { label: 'Entertainment', value: 'Entertainment' },
+    { label: 'Touka', value: 'Touka' },
   ];
 
-  const handleAddExpense = () => {
-    // Handle form submission logic
+  const initialValues = {
+    amount: '',
+    category: '',
+    date: '',
+    description: '',
+    receipt: null,
   };
 
-  const handleDropZoneDrop = (_dropFiles: File[], acceptedFiles: File[]) =>
-    setFile(acceptedFiles[0]);
-
-  const mockExpenseEntries = [
-    {
-      id: '1',
-      amount: '$1500',
-      category: 'Rent',
-      date: '2024-08-01',
-      description: '2024-08-01 Rent',
-    },
-    {
-      id: '2',
-      amount: '$300',
-      category: 'Food',
-      date: '2024-08-02',
-      description: 'Costco',
-    },
-    {
-      id: '3',
-      amount: '$4500',
-      category: 'Touka',
-      date: '2024-08-12',
-      description: 'Touka mouth surgery',
-    },
-  ];
+  const handleAddExpense = (values: typeof initialValues) => {
+    dispatch(addNewExpense(values));
+  };
 
   return (
     <Page>
+      <Text as={'h1'} variant='headingLg'>
+        Expense Tracker
+      </Text>
+
+      <br />
+
       <Card>
-        <FormLayout>
-          <TextField
-            label='Date'
-            value={date}
-            onChange={setDate}
-            type='date'
-            autoComplete='off'
-          />
-          <Select
-            label='Category'
-            options={categories}
-            value={category}
-            onChange={setCategory}
-          />
-          <TextField
-            label='Description'
-            value={description}
-            onChange={setDescription}
-            autoComplete='off'
-          />
-          <TextField
-            label='Amount'
-            value={amount}
-            onChange={setAmount}
-            type='number'
-            autoComplete='off'
-          />
+        <Text as='h3' variant='headingMd'>
+          Add Expense
+        </Text>
 
-          <DropZone onDrop={handleDropZoneDrop}>
-            {file && <DropZone.FileUpload actionTitle={file.name} />}
-            {!file && <DropZone.FileUpload />}
-          </DropZone>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={expenseValidationSchema}
+          onSubmit={handleAddExpense}
+        >
+          {({ values, handleChange, handleBlur, setFieldValue }) => (
+            <Form>
+              <FormLayout>
+                <TextField
+                  label='Amount'
+                  value={values.amount}
+                  onChange={handleChange('amount')}
+                  onBlur={handleBlur('amount')}
+                  type='number'
+                  autoComplete='off'
+                />
+                <Select
+                  label='Category'
+                  options={categories}
+                  value={values.category}
+                  onChange={handleChange('category')}
+                  onBlur={handleBlur('category')}
+                />
+                <TextField
+                  label='Date'
+                  value={values.date}
+                  onChange={handleChange('date')}
+                  onBlur={handleBlur('date')}
+                  type='date'
+                  autoComplete='off'
+                />
+                <TextField
+                  label='Description'
+                  value={values.description}
+                  onChange={handleChange('description')}
+                  onBlur={handleBlur('description')}
+                  autoComplete='off'
+                />
+                <DropZone
+                  onDrop={(_, acceptedFiles) =>
+                    setFieldValue('receipt', acceptedFiles[0])
+                  }
+                >
+                  {values.receipt ? (
+                    <DropZone.FileUpload actionTitle={values.receipt.name} />
+                  ) : (
+                    <DropZone.FileUpload />
+                  )}
+                </DropZone>
 
-          <Button onClick={handleAddExpense}>Add Expense</Button>
-        </FormLayout>
+                <Button submit variant='primary'>
+                  Add Expense
+                </Button>
+              </FormLayout>
+            </Form>
+          )}
+        </Formik>
       </Card>
+
+      <br />
 
       <Card>
         <Text as='h3' variant='headingMd'>
@@ -105,7 +128,7 @@ const ExpenseTracker = () => {
 
         <ResourceList
           resourceName={{ singular: 'expense', plural: 'expenses' }}
-          items={mockExpenseEntries}
+          items={expenses}
           renderItem={(item) => {
             const { id, amount, category, date, description } = item;
 
@@ -119,7 +142,8 @@ const ExpenseTracker = () => {
                   )
                 }
               >
-                <Text as='h5'>{date}</Text>
+                {/* <Text as='h5'>{date}</Text> */}
+                <Text as='h5'>{new Date(date).toLocaleDateString()}</Text>
                 <Text as='h5'>Category: {category}</Text>
                 <Text as='h5'>Description: {description}</Text>
                 <Text as='h5'>Amount: {amount}</Text>
@@ -133,3 +157,27 @@ const ExpenseTracker = () => {
 };
 
 export default ExpenseTracker;
+
+const mockExpenseEntries = [
+  {
+    id: '1',
+    amount: '$1500',
+    category: 'Rent',
+    date: '2024-08-01',
+    description: '2024-08-01 Rent',
+  },
+  {
+    id: '2',
+    amount: '$300',
+    category: 'Food',
+    date: '2024-08-02',
+    description: 'Costco',
+  },
+  {
+    id: '3',
+    amount: '$4500',
+    category: 'Touka',
+    date: '2024-08-12',
+    description: 'Touka mouth surgery',
+  },
+];

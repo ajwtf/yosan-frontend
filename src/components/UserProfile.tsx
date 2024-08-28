@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { Form, Formik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Avatar,
@@ -6,41 +7,74 @@ import {
   Card,
   FormLayout,
   Page,
+  Text,
   TextField,
 } from '@shopify/polaris';
 
-const UserProfile = () => {
-  const [username, setUsername] = useState('Touka');
-  const [email, setEmail] = useState('touka@gmail.com');
+import { RootState } from '../context';
+import { setUser } from '../context/userSlice';
+import { userProfileValidationSchema } from '../utils/validators';
 
-  const handleSaveProfile = () => {
-    // Handle profile saving logic
+const UserProfile = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
+
+  const initialValues = {
+    username: user?.username || '',
+    email: user?.email || '',
+  };
+
+  const handleSaveProfile = (values: typeof initialValues) => {
+    dispatch(setUser(values));
   };
 
   return (
     <Page>
+      <Text as={'h1'} variant='headingLg'>
+        {user.username || 'User Profile'}
+      </Text>
+
+      <br />
+
       <Card>
-        <FormLayout>
-          <Avatar size='sm' customer name={username} />
+        <Text as='h3' variant='headingMd'>
+          Edit Profile
+        </Text>
 
-          <TextField
-            // type='text'
-            label='Username'
-            value={username}
-            onChange={setUsername}
-            autoComplete='off'
-          />
+        <Formik
+          initialValues={initialValues}
+          validationSchema={userProfileValidationSchema}
+          onSubmit={handleSaveProfile}
+        >
+          {({ values, handleChange, handleBlur }) => (
+            <Form>
+              <FormLayout>
+                <Avatar size='sm' customer name={values.username} />
+                <TextField
+                  type='text'
+                  label='Username'
+                  value={values.username}
+                  onChange={handleChange('username')}
+                  onBlur={handleBlur('username')}
+                  autoComplete='off'
+                />
 
-          <TextField
-            type='email'
-            label='Email'
-            value={email}
-            onChange={setEmail}
-            autoComplete='off'
-          />
+                <TextField
+                  type='email'
+                  label='Email'
+                  value={values.email}
+                  onChange={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  autoComplete='off'
+                />
 
-          <Button onClick={handleSaveProfile}>Save Profile</Button>
-        </FormLayout>
+                <Button submit variant='primary'>
+                  Save Profile
+                </Button>
+              </FormLayout>
+            </Form>
+          )}
+        </Formik>
       </Card>
     </Page>
   );

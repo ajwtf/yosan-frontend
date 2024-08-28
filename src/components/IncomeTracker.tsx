@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+
+import { Form, Formik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Button,
@@ -12,116 +15,36 @@ import {
   TextField,
 } from '@shopify/polaris';
 
+import { RootState } from '../context';
+import { addNewIncome, fetchIncomes } from '../context/incomeSlice';
+import { incomeValidationSchema } from '../utils/validators';
+
 const IncomeTracker = () => {
-  /* const deselectedOptions = useMemo(
-    () => [
-      { label: 'Salary', value: 'salary' },
-      { label: 'Freelance', value: 'freelance' },
-      { label: 'Investments', value: 'investments' },
-      { label: 'Freelo', value: 'freelo' },
-    ],
-    [],
-  );
+  const dispatch = useDispatch();
+  const incomes = useSelector((state: RootState) => state.incomes);
 
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [options, setOptions] = useState(deselectedOptions);
-  const [loading, setLoading] = useState(false);
-
-  const updateText = useCallback(
-    (value: string) => {
-      setInputValue(value);
-
-      if (!loading) {
-        setLoading(true);
-      }
-
-      setTimeout(() => {
-        if (value === '') {
-          setOptions(deselectedOptions);
-          setLoading(false);
-          return;
-        }
-        const filterRegex = new RegExp(value, 'i');
-        const resultOptions = deselectedOptions.filter((option) =>
-          option.label.match(filterRegex),
-        );
-        setOptions(resultOptions);
-        setLoading(false);
-      }, 300);
-    },
-    [deselectedOptions, loading],
-  );
-
-  const updateSelection = useCallback(
-    (selected: string[]) => {
-      const selectedText = selected.map((selectedItem) => {
-        const matchedOption = options.find((option) => {
-          return option.value.match(selectedItem);
-        });
-        return matchedOption && matchedOption.label;
-      });
-      setSelectedOptions(selected);
-      setInputValue(selectedText[0] || '');
-    },
-    [options],
-  );
-
-  const textField = (
-    <Autocomplete.TextField
-      onChange={updateText}
-      label='Tags'
-      value={inputValue}
-      prefix={<Icon source={SearchIcon} />}
-      placeholder='Category'
-      autoComplete='off'
-    />
-  );
-
-  const emptyState = (
-    <>
-      <Icon source={SearchIcon} /> <Text as={'h3'}>No results</Text>
-    </>
-  ); */
-
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
-  const [date, setDate] = useState('');
-  const [description, setDescription] = useState('');
+  useEffect(() => {
+    dispatch(fetchIncomes());
+  }, [dispatch]);
 
   const categories = [
     { label: 'Salary', value: 'Salary' },
     { label: 'Freelance', value: 'Freelance' },
     { label: 'Investments', value: 'Investments' },
+    { label: 'Goodwill', value: 'Goodwill' },
   ];
 
-  const handleAddIncome = () => {
-    // Handle form submission logic
+  const initialValues = {
+    amount: '',
+    category: '',
+    date: '',
+    description: '',
   };
 
-  const mockIncomeEntries = [
-    {
-      id: '1',
-      amount: '$3000',
-      category: 'Salary',
-      date: '2024-08-01',
-      description: '2024-08-01 Salary',
-    },
-    {
-      id: '2',
-      amount: '$500',
-      category: 'Freelance',
-      date: '2024-08-05',
-      description: 'Project A',
-    },
-    {
-      id: '3',
-      amount: '$700',
-      category: 'Investments',
-      date: '2024-08-14',
-      description: 'Bitcoin',
-    },
-  ];
+  // Handle form submission logic
+  const handleAddIncome = (values: typeof initialValues) => {
+    dispatch(addNewIncome(values));
+  };
 
   return (
     <Page>
@@ -134,38 +57,66 @@ const IncomeTracker = () => {
         textField={textField}
       /> */}
 
-      <Card>
-        <FormLayout>
-          <TextField
-            label='Date'
-            value={date}
-            onChange={setDate}
-            type='date'
-            autoComplete='off'
-          />
-          <Select
-            label='Category'
-            options={categories}
-            value={category}
-            onChange={setCategory}
-          />
-          <TextField
-            label='Description'
-            value={description}
-            onChange={setDescription}
-            autoComplete='off'
-          />
-          <TextField
-            label='Amount'
-            value={amount}
-            onChange={setAmount}
-            type='number'
-            autoComplete='off'
-          />
+      <Text as={'h1'} variant='headingLg'>
+        Income Tracker
+      </Text>
 
-          <Button onClick={handleAddIncome}>Add Income</Button>
-        </FormLayout>
+      <br />
+
+      <Card>
+        <Text as='h3' variant='headingMd'>
+          Add Income
+        </Text>
+
+        <Formik
+          initialValues={initialValues}
+          validationSchema={incomeValidationSchema}
+          onSubmit={handleAddIncome}
+        >
+          {({ values, handleChange, handleBlur }) => (
+            <Form>
+              <FormLayout>
+                <TextField
+                  label='Amount'
+                  value={values.amount}
+                  onChange={handleChange('amount')}
+                  onBlur={handleBlur('amount')}
+                  type='number'
+                  autoComplete='off'
+                />
+                <Select
+                  label='Category'
+                  options={categories}
+                  value={values.category}
+                  onChange={handleChange('category')}
+                  onBlur={handleBlur('category')}
+                />
+
+                <TextField
+                  label='Date'
+                  value={values.date}
+                  onChange={handleChange('date')}
+                  onBlur={handleBlur('date')}
+                  type='date'
+                  autoComplete='off'
+                />
+                <TextField
+                  label='Description'
+                  value={values.description}
+                  onChange={handleChange('description')}
+                  onBlur={handleBlur('description')}
+                  autoComplete='off'
+                />
+                <Button submit variant='primary'>
+                  Add Income
+                </Button>
+              </FormLayout>
+            </Form>
+          )}
+        </Formik>
       </Card>
+
+      <br />
 
       <Card>
         <Text as='h3' variant='headingMd'>
@@ -174,10 +125,9 @@ const IncomeTracker = () => {
 
         <ResourceList
           resourceName={{ singular: 'income', plural: 'incomes' }}
-          items={mockIncomeEntries}
+          items={incomes}
           renderItem={(item) => {
             const { id, amount, category, date, description } = item;
-
             return (
               <ResourceItem
                 id={id}
@@ -188,7 +138,8 @@ const IncomeTracker = () => {
                   )
                 }
               >
-                <Text as='h5'>{date}</Text>
+                {/* <Text as='h5'>{date}</Text> */}
+                <Text as='h5'>{new Date(date).toLocaleDateString()}</Text>
                 <Text as='h5'>Category: {category}</Text>
                 <Text as='h5'>Description: {description}</Text>
                 <Text as='h5'>Amount: {amount}</Text>

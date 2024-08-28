@@ -2,100 +2,30 @@ import { ReactNode } from 'react';
 
 import { Provider } from 'react-redux';
 
-import {
-  configureStore,
-  createAsyncThunk,
-  createSlice,
-  PayloadAction,
-} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 
-import * as api from '../utils/api';
+import budgetReducer from './budgetSlice';
+import expenseReducer from './expenseSlice';
+import incomeReducer from './incomeSlice';
+import userReducer from './userSlice';
 
-const initialState = {
-  user: null,
-  incomes: [],
-  expenses: [],
-  budget: null,
-};
-
-const userSlice = createSlice({
-  name: 'user',
-  initialState: initialState.user,
-  reducers: {
-    setUser: (state, action: PayloadAction<any>) => action.payload,
-  },
-});
-
-export const fetchIncomes = createAsyncThunk(
-  'incomes/fetchIncomes',
-  async () => {
-    const { data } = await api.fetchIncomes();
-    return data;
-  },
-);
-
-export const addNewIncome = createAsyncThunk(
-  'incomes/addNewIncome',
-  async (incomeData: any) => {
-    const { data } = await api.addIncome(incomeData);
-    return data;
-  },
-);
-
-const incomeSlice = createSlice({
-  // initialState: initialState.incomes,
-  /*   addIncome: (state, action: PayloadAction<any>) => {
-        state.push(action.payload);
-        },
-        setIncomes: (state, action: PayloadAction<any[]>) => action.payload, */
-  name: 'incomes',
-  initialState: [],
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(fetchIncomes.fulfilled, (state, action) => {
-      return action.payload;
-    });
-    builder.addCase(addNewIncome.fulfilled, (state, action) => {
-      state.push(action.payload);
-    });
-  },
-});
-
-const expenseSlice = createSlice({
-  name: 'expenses',
-  initialState: initialState.expenses,
-  reducers: {
-    addExpense: (state, action: PayloadAction<any>) => {
-      state.push(action.payload);
-    },
-    setExpenses: (state, action: PayloadAction<any[]>) => action.payload,
-  },
-});
-
-const budgetSlice = createSlice({
-  name: 'budget',
-  initialState: initialState.budget,
-  reducers: {
-    setBudget: (state, action: PayloadAction<any>) => action.payload,
-  },
-});
-
+// Configure Redux store
 const store = configureStore({
   reducer: {
-    user: userSlice.reducer,
-    incomes: incomeSlice.reducer,
-    expenses: expenseSlice.reducer,
-    budget: budgetSlice.reducer,
+    user: userReducer,
+    incomes: incomeReducer,
+    expenses: expenseReducer,
+    budget: budgetReducer,
   },
 });
 
-export const { setUser } = userSlice.actions;
-export const { addIncome, setIncomes } = incomeSlice.actions;
-export const { addExpense, setExpenses } = expenseSlice.actions;
-export const { setBudget } = budgetSlice.actions;
-
-export default incomeSlice.reducer;
-
+// Define StoreProvider component that wraps the entire app
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
   return <Provider store={store}>{children}</Provider>;
 };
+
+// Expore the store
+// Types derived from the store configuration. These types can be used throughout the app to ensure type safety when interacting with the Redux store
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export default { store };

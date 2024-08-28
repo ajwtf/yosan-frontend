@@ -48,3 +48,27 @@ export default tseslint.config({
   },
 });
 ```
+
+# Folder Structure
+
+frontend/
+├── src/
+│ ├── components/
+│ │ ├── Dashboard.tsx
+│ │ ├── IncomeTracker.tsx
+│ │ ├── ExpenseTracker.tsx
+│ │ ├── BudgetTracker.tsx
+│ │ ├── Reports.tsx
+│ │ └── UserProfile.tsx
+│ ├── context/
+│ │ ├── index.tsx
+│ │ ├── incomeSlice.ts
+│ │ ├── expenseSlice.ts
+│ │ ├── budgetSlice.ts
+│ │ ├── userSlice.ts
+│ ├── utils/
+│ │ ├── api.ts
+│ │ └── validators.ts
+│ ├── App.tsx
+│ ├── main.tsx
+└ └── index.css

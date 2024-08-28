@@ -1,8 +1,6 @@
 import { useCallback, useState } from 'react';
 
-import { NavLink } from 'react-router-dom';
-
-import { Card, Link, Page, Tabs } from '@shopify/polaris';
+import { Button, Card, Page, Tabs } from '@shopify/polaris';
 
 const NavTab = () => {
   const [selected, setSelected] = useState(0);
@@ -16,10 +14,10 @@ const NavTab = () => {
     {
       id: 'dashboard-1',
       content: (
-        <NavLink to='/'>
+        <Button url='/'>
           {/* <Icon source={DashboardIcon} /> */}
           <span>Dashboard</span>
-        </NavLink>
+        </Button>
       ),
       accessibilityLabel: 'Dashboard',
       panelID: 'dashboard-content-1',
@@ -27,50 +25,50 @@ const NavTab = () => {
     {
       id: 'income-1',
       content: (
-        <NavLink to='/income'>
+        <Button url='/income'>
           {/* <Icon source={IncomeIcon} /> */}
           <span>Income</span>
-        </NavLink>
+        </Button>
       ),
       panelID: 'income-content-1',
     },
     {
       id: 'expense-1',
       content: (
-        <NavLink to='/expense'>
+        <Button url='/expense'>
           {/* <Icon source={ExpenseIcon} /> */}
           <span>Expense</span>
-        </NavLink>
+        </Button>
       ),
       panelID: 'expense-content-1',
     },
     {
       id: 'budget-1',
       content: (
-        <NavLink to='/budget'>
+        <Button url='/budget'>
           {/* <Icon source={BudgetIcon} /> */}
           <span>Budget</span>
-        </NavLink>
+        </Button>
       ),
       panelID: 'budget-content-1',
     },
     {
       id: 'reports-1',
       content: (
-        <NavLink to='/reports'>
+        <Button url='/reports'>
           {/* {<Icon source={ReportsIcon} />} */}
           <span>Reports</span>
-        </NavLink>
+        </Button>
       ),
       panelID: 'reports-content-1',
     },
     {
       id: 'user-1',
       content: (
-        <Link url='/user'>
+        <Button url='/user'>
           {/* <Icon source={UserIcon} /> */}
           <span>User</span>
-        </Link>
+        </Button>
       ),
       panelID: 'user-content-1',
     },
