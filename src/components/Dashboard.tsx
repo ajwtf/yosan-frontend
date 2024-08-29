@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Card, DataTable, Link, Page, Text } from '@shopify/polaris';
 
 import { RootState } from '../context';
-import { fetchExpenses } from '../context/expenseSlice';
-import { fetchIncomes } from '../context/incomeSlice';
+import { getExpenses } from '../context/expenseSlice';
+import { getIncomes } from '../context/incomeSlice';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -14,8 +14,8 @@ const Dashboard = () => {
   const expenses = useSelector((state: RootState) => state.expenses);
 
   useEffect(() => {
-    dispatch(fetchIncomes());
-    dispatch(fetchExpenses());
+    dispatch(getIncomes());
+    dispatch(getExpenses());
   }, [dispatch]);
 
   const currentIncome = incomes.reduce(

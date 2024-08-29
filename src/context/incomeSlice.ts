@@ -2,21 +2,18 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import * as api from '../utils/api';
+import { addIncome, fetchIncomes } from '../utils/api';
 
 // Thunks
-export const fetchIncomes = createAsyncThunk(
-  'incomes/fetchIncomes',
-  async () => {
-    const { data } = await api.fetchIncomes();
-    return data;
-  },
-);
+export const getIncomes = createAsyncThunk('incomes/fetchIncomes', async () => {
+  const { data } = await fetchIncomes();
+  return data;
+});
 
-export const addNewIncome = createAsyncThunk(
-  'incomes/addNewIncome',
+export const createIncome = createAsyncThunk(
+  'incomes/addIncome',
   async (incomeData: any) => {
-    const { data } = await api.addIncome(incomeData);
+    const { data } = await addIncome(incomeData);
     return data;
   },
 );
@@ -27,8 +24,8 @@ const incomeSlice = createSlice({
   initialState: [],
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchIncomes.fulfilled, (state, action) => action.payload);
-    builder.addCase(addNewIncome.fulfilled, (state, action) => {
+    builder.addCase(getIncomes.fulfilled, (state, action) => action.payload);
+    builder.addCase(createIncome.fulfilled, (state, action) => {
       state.push(action.payload);
     });
   },

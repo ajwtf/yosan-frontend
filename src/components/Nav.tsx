@@ -8,13 +8,13 @@ const Nav = () => {
   return (
     <Page>
       <Text as='h1' variant='headingLg'>
-        Yosan
+        <a href='/'>Yosan</a>
       </Text>
 
       <InlineStack align='center' gap='100'>
         <Button
           //   icon={DashboardIcon}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/dashboard')}
           variant='primary'
         >
           Dashboard

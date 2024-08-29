@@ -4,20 +4,20 @@ import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  Button,
-  Card,
-  DropZone,
-  FormLayout,
-  Page,
-  ResourceItem,
-  ResourceList,
-  Select,
-  Text,
-  TextField,
+    Button,
+    Card,
+    DropZone,
+    FormLayout,
+    Page,
+    ResourceItem,
+    ResourceList,
+    Select,
+    Text,
+    TextField,
 } from '@shopify/polaris';
 
 import { RootState } from '../context';
-import { addNewExpense, fetchExpenses } from '../context/expenseSlice';
+import { createExpense, getExpenses } from '../context/expenseSlice';
 import { expenseValidationSchema } from '../utils/validators';
 
 const ExpenseTracker = () => {
@@ -25,7 +25,7 @@ const ExpenseTracker = () => {
   const expenses = useSelector((state: RootState) => state.expenses);
 
   useEffect(() => {
-    dispatch(fetchExpenses());
+    dispatch(getExpenses());
   }, [dispatch]);
 
   const categories = [
@@ -37,14 +37,19 @@ const ExpenseTracker = () => {
 
   const initialValues = {
     amount: '',
-    category: '',
+    category: 'Rent',
     date: '',
     description: '',
     receipt: null,
   };
 
-  const handleAddExpense = (values: typeof initialValues) => {
-    dispatch(addNewExpense(values));
+  const handleAddExpense = async (values: typeof initialValues) => {
+    try {
+      await dispatch(createExpense(values)).unwrap();
+      dispatch(getExpenses());
+    } catch (error) {
+      console.error('Failed to add expense:', error);
+    }
   };
 
   return (
@@ -67,7 +72,14 @@ const ExpenseTracker = () => {
           validationSchema={expenseValidationSchema}
           onSubmit={handleAddExpense}
         >
-          {({ values, handleChange, handleBlur, setFieldValue }) => (
+          {({
+            values,
+            handleChange,
+            handleBlur,
+            setFieldValue,
+            errors,
+            touched,
+          }) => (
             <Form>
               <FormLayout>
                 <TextField
@@ -75,6 +87,7 @@ const ExpenseTracker = () => {
                   value={values.date}
                   onChange={handleChange('date')}
                   onBlur={handleBlur('date')}
+                  error={touched.date && errors.date ? errors.date : ''}
                   type='date'
                   autoComplete='off'
                 />
@@ -85,6 +98,9 @@ const ExpenseTracker = () => {
                   value={values.category}
                   onChange={handleChange('category')}
                   onBlur={handleBlur('category')}
+                  error={
+                    touched.category && errors.category ? errors.category : ''
+                  }
                 />
 
                 <TextField
@@ -92,6 +108,12 @@ const ExpenseTracker = () => {
                   value={values.description}
                   onChange={handleChange('description')}
                   onBlur={handleBlur('description')}
+                  error={
+                    touched.description && errors.description
+                      ? errors.description
+                      : ''
+                  }
+                  type='text'
                   autoComplete='off'
                 />
 
@@ -100,16 +122,15 @@ const ExpenseTracker = () => {
                   value={values.amount}
                   onChange={handleChange('amount')}
                   onBlur={handleBlur('amount')}
+                  error={touched.amount && errors.amount ? errors.amount : ''}
                   type='number'
                   autoComplete='off'
                 />
 
-                {/* <br /> */}
-                {/* <Divider /> */}
-
                 <Text as='span' variant='bodyMd'>
                   Receipt
                 </Text>
+
                 <DropZone
                   onDrop={(_, acceptedFiles) =>
                     setFieldValue('receipt', acceptedFiles[0])

@@ -8,10 +8,15 @@ API.interceptors.request.use((req) => {
       JSON.parse(localStorage.getItem('profile') || '').token
     }`;
   }
-
   return req;
 });
 
+// Auth API calls
+export const registerUser = (formData: any) =>
+  API.post('/auth/register', formData);
+export const loginUser = (formData: any) => API.post('/auth/login', formData);
+
+// Other API calls...
 export const fetchIncomes = () => API.get('/income');
 export const addIncome = (incomeData: any) => API.post('/income', incomeData);
 
@@ -21,6 +26,3 @@ export const addExpense = (expenseData: any) =>
 
 export const fetchBudget = () => API.get('/budget');
 export const setBudget = (budgetData: any) => API.post('/budget', budgetData);
-
-// export const fetchUser = () => API.get('/user/profile');
-// export const setUser = (userData: any) => API.post('/user/profile', userData);

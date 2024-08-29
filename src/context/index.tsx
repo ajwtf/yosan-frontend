@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 
 import { configureStore } from '@reduxjs/toolkit';
 
+import authReducer from './authSlice';
 import budgetReducer from './budgetSlice';
 import expenseReducer from './expenseSlice';
 import incomeReducer from './incomeSlice';
@@ -16,6 +17,7 @@ const store = configureStore({
     incomes: incomeReducer,
     expenses: expenseReducer,
     budget: budgetReducer,
+    auth: authReducer,
   },
 });
 

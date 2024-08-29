@@ -2,18 +2,18 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import * as api from '../utils/api';
+import { fetchBudget, setBudget } from '../utils/api';
 
 // Thunks
-export const fetchBudget = createAsyncThunk('budget/fetchBudget', async () => {
-  const { data } = await api.fetchBudget();
+export const getBudget = createAsyncThunk('budget/fetchBudget', async () => {
+  const { data } = await fetchBudget();
   return data;
 });
 
-export const setNewBudget = createAsyncThunk(
-  'budget/setNewBudget',
+export const createBudget = createAsyncThunk(
+  'budget/setBudget',
   async (budgetData: any) => {
-    const { data } = await api.setBudget(budgetData);
+    const { data } = await setBudget(budgetData);
     return data;
   },
 );
@@ -24,8 +24,8 @@ const budgetSlice = createSlice({
   initialState: null,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchBudget.fulfilled, (state, action) => action.payload);
-    builder.addCase(setNewBudget.fulfilled, (state, action) => action.payload);
+    builder.addCase(getBudget.fulfilled, (state, action) => action.payload);
+    builder.addCase(createBudget.fulfilled, (state, action) => action.payload);
   },
 });
 

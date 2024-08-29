@@ -14,9 +14,9 @@ import {
 } from '@shopify/polaris';
 
 import { RootState } from '../context';
-import { fetchBudget, setNewBudget } from '../context/budgetSlice';
-import { fetchExpenses } from '../context/expenseSlice';
-import { fetchIncomes } from '../context/incomeSlice';
+import { createBudget, getBudget } from '../context/budgetSlice';
+import { getExpenses } from '../context/expenseSlice';
+import { getIncomes } from '../context/incomeSlice';
 import { budgetValidationSchema } from '../utils/validators';
 
 const BudgetTracker = () => {
@@ -26,9 +26,9 @@ const BudgetTracker = () => {
   const expenses = useSelector((state: RootState) => state.expenses);
 
   useEffect(() => {
-    dispatch(fetchBudget());
-    dispatch(fetchIncomes());
-    dispatch(fetchExpenses());
+    dispatch(getBudget());
+    dispatch(getIncomes());
+    dispatch(getExpenses());
   }, [dispatch]);
 
   //   currentIncome and currentExpenses are calculated using the reduce method on the fetched incomes and expenses arrays from the Redux store
@@ -47,7 +47,7 @@ const BudgetTracker = () => {
   };
 
   const handleSetBudget = (values: typeof initialValues) => {
-    dispatch(setNewBudget(values));
+    dispatch(createBudget(values));
   };
 
   //   incomeProgress and expenseProgress are calculated based on the goals set in the form and the actual totals

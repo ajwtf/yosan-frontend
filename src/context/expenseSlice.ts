@@ -2,21 +2,21 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-import * as api from '../utils/api';
+import { addExpense, fetchExpenses } from '../utils/api';
 
 // Thunks
-export const fetchExpenses = createAsyncThunk(
+export const getExpenses = createAsyncThunk(
   'expenses/fetchExpenses',
   async () => {
-    const { data } = await api.fetchExpenses();
+    const { data } = await fetchExpenses();
     return data;
   },
 );
 
-export const addNewExpense = createAsyncThunk(
-  'expenses/addNewExpense',
+export const createExpense = createAsyncThunk(
+  'expenses/addExpense',
   async (expenseData: any) => {
-    const { data } = await api.addExpense(expenseData);
+    const { data } = await addExpense(expenseData);
     return data;
   },
 );
@@ -27,8 +27,8 @@ const expenseSlice = createSlice({
   initialState: [],
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchExpenses.fulfilled, (state, action) => action.payload);
-    builder.addCase(addNewExpense.fulfilled, (state, action) => {
+    builder.addCase(getExpenses.fulfilled, (state, action) => action.payload);
+    builder.addCase(createExpense.fulfilled, (state, action) => {
       state.push(action.payload);
     });
   },

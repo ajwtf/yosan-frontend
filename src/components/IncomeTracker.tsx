@@ -4,19 +4,19 @@ import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  Button,
-  Card,
-  FormLayout,
-  Page,
-  ResourceItem,
-  ResourceList,
-  Select,
-  Text,
-  TextField,
+    Button,
+    Card,
+    FormLayout,
+    Page,
+    ResourceItem,
+    ResourceList,
+    Select,
+    Text,
+    TextField,
 } from '@shopify/polaris';
 
 import { RootState } from '../context';
-import { addNewIncome, fetchIncomes } from '../context/incomeSlice';
+import { createIncome, getIncomes } from '../context/incomeSlice';
 import { incomeValidationSchema } from '../utils/validators';
 
 const IncomeTracker = () => {
@@ -24,7 +24,7 @@ const IncomeTracker = () => {
   const incomes = useSelector((state: RootState) => state.incomes);
 
   useEffect(() => {
-    dispatch(fetchIncomes());
+    dispatch(getIncomes());
   }, [dispatch]);
 
   const categories = [
@@ -36,14 +36,19 @@ const IncomeTracker = () => {
 
   const initialValues = {
     amount: '',
-    category: '',
+    category: 'Salary',
     date: '',
     description: '',
   };
 
   // Handle form submission logic
-  const handleAddIncome = (values: typeof initialValues) => {
-    dispatch(addNewIncome(values));
+  const handleAddIncome = async (values: typeof initialValues) => {
+    try {
+      await dispatch(createIncome(values)).unwrap();
+      dispatch(getIncomes()); // Refresh the income list
+    } catch (error) {
+      console.error('Failed to add income:', error);
+    }
   };
 
   return (
@@ -75,7 +80,7 @@ const IncomeTracker = () => {
           validationSchema={incomeValidationSchema}
           onSubmit={handleAddIncome}
         >
-          {({ values, handleChange, handleBlur }) => (
+          {({ values, handleChange, handleBlur, errors, touched }) => (
             <Form>
               <FormLayout>
                 <TextField
@@ -83,6 +88,7 @@ const IncomeTracker = () => {
                   value={values.date}
                   onChange={handleChange('date')}
                   onBlur={handleBlur('date')}
+                  error={touched.date && errors.date ? errors.date : ''}
                   type='date'
                   autoComplete='off'
                 />
@@ -93,6 +99,9 @@ const IncomeTracker = () => {
                   value={values.category}
                   onChange={handleChange('category')}
                   onBlur={handleBlur('category')}
+                  error={
+                    touched.category && errors.category ? errors.category : ''
+                  }
                 />
 
                 <TextField
@@ -100,6 +109,12 @@ const IncomeTracker = () => {
                   value={values.description}
                   onChange={handleChange('description')}
                   onBlur={handleBlur('description')}
+                  error={
+                    touched.description && errors.description
+                      ? errors.description
+                      : ''
+                  }
+                  type='text'
                   autoComplete='off'
                 />
 
@@ -108,6 +123,7 @@ const IncomeTracker = () => {
                   value={values.amount}
                   onChange={handleChange('amount')}
                   onBlur={handleBlur('amount')}
+                  error={touched.amount && errors.amount ? errors.amount : ''}
                   type='number'
                   autoComplete='off'
                 />
