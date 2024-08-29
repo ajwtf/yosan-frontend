@@ -1,16 +1,21 @@
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, InlineStack, Page, Text } from '@shopify/polaris';
+import { Button, InlineStack, Page } from '@shopify/polaris';
+
+import { logout } from '../context/authSlice';
 
 const Nav = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
   return (
     <Page>
-      <Text as='h1' variant='headingLg'>
-        <a href='/'>Yosan</a>
-      </Text>
-
       <InlineStack align='center' gap='100'>
         <Button
           //   icon={DashboardIcon}
@@ -53,6 +58,14 @@ const Nav = () => {
           variant='primary'
         >
           User
+        </Button>
+
+        <Button
+          //   icon={LogoutIcon}
+          onClick={handleLogout}
+          variant='secondary'
+        >
+          Logout
         </Button>
       </InlineStack>
     </Page>

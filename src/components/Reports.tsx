@@ -1,13 +1,13 @@
 import { useSelector } from 'react-redux';
 import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+    CartesianGrid,
+    Legend,
+    Line,
+    LineChart,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from 'recharts';
 
 import { Card, Page, Text } from '@shopify/polaris';
@@ -22,7 +22,7 @@ const Reports = () => {
   const data = incomes.map((income, index) => ({
     name: new Date(income.date).toLocaleDateString(),
     income: income.amount,
-    expenses: expenses[index].amount || 0,
+    expense: expenses[index].amount || 0,
   }));
 
   return (

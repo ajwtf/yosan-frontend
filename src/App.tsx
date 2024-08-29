@@ -4,11 +4,13 @@ import { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  BrowserRouter as Router,
-  Navigate,
-  Route,
-  Routes,
+    BrowserRouter as Router,
+    Navigate,
+    Route,
+    Routes,
 } from 'react-router-dom';
+
+import { Button, Page } from '@shopify/polaris';
 
 import BudgetTracker from './components/BudgetTracker';
 import Dashboard from './components/Dashboard';
@@ -36,9 +38,15 @@ function App() {
 
   return (
     <Router>
-      {/* <NavTab /> */}
+      <Page>
+        <Button variant='primary' url='/'>
+          Yosan
+        </Button>
+      </Page>
 
-      <Nav />
+      {/* <NavTab /> */}
+      {/* <Nav /> */}
+      {isAuthenticated && <Nav />}
 
       <Routes>
         <Route

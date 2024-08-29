@@ -4,13 +4,13 @@ import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  Button,
-  Card,
-  FormLayout,
-  Page,
-  ProgressBar,
-  Text,
-  TextField,
+    Button,
+    Card,
+    FormLayout,
+    Page,
+    ProgressBar,
+    Text,
+    TextField,
 } from '@shopify/polaris';
 
 import { RootState } from '../context';
@@ -46,8 +46,13 @@ const BudgetTracker = () => {
     totalExpenseGoal: budget?.totalExpenseGoal || '',
   };
 
-  const handleSetBudget = (values: typeof initialValues) => {
-    dispatch(createBudget(values));
+  const handleSetBudget = async (values: typeof initialValues) => {
+    try {
+      await dispatch(createBudget(values)).unwrap();
+      dispatch(getBudget());
+    } catch (error) {
+      console.error('Failed to set budget:', error);
+    }
   };
 
   //   incomeProgress and expenseProgress are calculated based on the goals set in the form and the actual totals
@@ -90,6 +95,7 @@ const BudgetTracker = () => {
                   type='number'
                   autoComplete='off'
                 />
+
                 <TextField
                   label='Total Expense Goal'
                   value={values.totalExpenseGoal}
@@ -98,6 +104,7 @@ const BudgetTracker = () => {
                   type='number'
                   autoComplete='off'
                 />
+
                 <Button submit variant='primary'>
                   Set Budget
                 </Button>
