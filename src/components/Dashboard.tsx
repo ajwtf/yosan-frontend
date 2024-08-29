@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Card, DataTable, Page, Text } from '@shopify/polaris';
+import { Card, DataTable, Link, Page, Text } from '@shopify/polaris';
 
 import { RootState } from '../context';
 import { fetchExpenses } from '../context/expenseSlice';
@@ -30,10 +30,24 @@ const Dashboard = () => {
 
   const rows = [
     // ['Income', `$${currentIncome.toFixed(2)}`],
-    ['Income', `$${currentIncome.toLocaleString()}`],
-    ['Expenses', `$${currentExpenses.toLocaleString()}`],
-    ['Balance', `$${balance.toLocaleString()}`],
+    // ['Income', `$${currentIncome.toLocaleString()}`],
+    // ['Expenses', `$${currentExpenses.toLocaleString()}`],
+    // ['Balance', `$${balance.toLocaleString()}`],
+    [
+      <Link removeUnderline url='/income' key='income'>
+        Income
+      </Link>,
+      `$ ${currentIncome.toFixed(2)}`,
+    ],
+    [
+      <Link removeUnderline url='/expense' key='expenses'>
+        Expenses
+      </Link>,
+      `$ ${currentExpenses.toFixed(2)}`,
+    ],
   ];
+
+  const balanceTotal = `$ ${balance.toFixed(2)}`;
 
   return (
     <Page>
@@ -48,10 +62,18 @@ const Dashboard = () => {
           Summary
         </Text>
 
+        <br />
+
         <DataTable
           columnContentTypes={['text', 'numeric']}
           headings={['Type', 'Amount']}
           rows={rows}
+          totals={['', `${balanceTotal}`]}
+          totalsName={{
+            singular: 'Balance',
+            plural: 'Balance',
+          }}
+          showTotalsInFooter
         />
       </Card>
     </Page>

@@ -60,6 +60,8 @@ const ExpenseTracker = () => {
           Add Expense
         </Text>
 
+        <br />
+
         <Formik
           initialValues={initialValues}
           validationSchema={expenseValidationSchema}
@@ -69,21 +71,6 @@ const ExpenseTracker = () => {
             <Form>
               <FormLayout>
                 <TextField
-                  label='Amount'
-                  value={values.amount}
-                  onChange={handleChange('amount')}
-                  onBlur={handleBlur('amount')}
-                  type='number'
-                  autoComplete='off'
-                />
-                <Select
-                  label='Category'
-                  options={categories}
-                  value={values.category}
-                  onChange={handleChange('category')}
-                  onBlur={handleBlur('category')}
-                />
-                <TextField
                   label='Date'
                   value={values.date}
                   onChange={handleChange('date')}
@@ -91,6 +78,15 @@ const ExpenseTracker = () => {
                   type='date'
                   autoComplete='off'
                 />
+
+                <Select
+                  label='Category'
+                  options={categories}
+                  value={values.category}
+                  onChange={handleChange('category')}
+                  onBlur={handleBlur('category')}
+                />
+
                 <TextField
                   label='Description'
                   value={values.description}
@@ -98,6 +94,22 @@ const ExpenseTracker = () => {
                   onBlur={handleBlur('description')}
                   autoComplete='off'
                 />
+
+                <TextField
+                  label='Amount'
+                  value={values.amount}
+                  onChange={handleChange('amount')}
+                  onBlur={handleBlur('amount')}
+                  type='number'
+                  autoComplete='off'
+                />
+
+                {/* <br /> */}
+                {/* <Divider /> */}
+
+                <Text as='span' variant='bodyMd'>
+                  Receipt
+                </Text>
                 <DropZone
                   onDrop={(_, acceptedFiles) =>
                     setFieldValue('receipt', acceptedFiles[0])
@@ -125,6 +137,8 @@ const ExpenseTracker = () => {
         <Text as='h3' variant='headingMd'>
           Expense Detail
         </Text>
+
+        <br />
 
         <ResourceList
           resourceName={{ singular: 'expense', plural: 'expenses' }}
@@ -158,26 +172,26 @@ const ExpenseTracker = () => {
 
 export default ExpenseTracker;
 
-const mockExpenseEntries = [
-  {
-    id: '1',
-    amount: '$1500',
-    category: 'Rent',
-    date: '2024-08-01',
-    description: '2024-08-01 Rent',
-  },
-  {
-    id: '2',
-    amount: '$300',
-    category: 'Food',
-    date: '2024-08-02',
-    description: 'Costco',
-  },
-  {
-    id: '3',
-    amount: '$4500',
-    category: 'Touka',
-    date: '2024-08-12',
-    description: 'Touka mouth surgery',
-  },
-];
+// const mockExpenseEntries = [
+//   {
+//     id: '1',
+//     amount: '$1500',
+//     category: 'Rent',
+//     date: '2024-08-01',
+//     description: '2024-08-01 Rent',
+//   },
+//   {
+//     id: '2',
+//     amount: '$300',
+//     category: 'Food',
+//     date: '2024-08-02',
+//     description: 'Costco',
+//   },
+//   {
+//     id: '3',
+//     amount: '$4500',
+//     category: 'Touka',
+//     date: '2024-08-12',
+//     description: 'Touka mouth surgery',
+//   },
+// ];

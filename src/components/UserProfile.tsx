@@ -41,6 +41,8 @@ const UserProfile = () => {
           Edit Profile
         </Text>
 
+        <br />
+
         <Formik
           initialValues={initialValues}
           validationSchema={userProfileValidationSchema}

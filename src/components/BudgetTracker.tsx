@@ -72,6 +72,8 @@ const BudgetTracker = () => {
           Add Budget
         </Text>
 
+        <br />
+
         <Formik
           initialValues={initialValues}
           validationSchema={budgetValidationSchema}
@@ -111,6 +113,8 @@ const BudgetTracker = () => {
         <Text as='h3' variant='headingMd'>
           Budget Progress
         </Text>
+
+        <br />
 
         {/* <Text as='h5'>Income Progress</Text> */}
         <Text as='h5'>Current Income: ${currentIncome}</Text>

@@ -68,6 +68,8 @@ const IncomeTracker = () => {
           Add Income
         </Text>
 
+        <br />
+
         <Formik
           initialValues={initialValues}
           validationSchema={incomeValidationSchema}
@@ -77,13 +79,14 @@ const IncomeTracker = () => {
             <Form>
               <FormLayout>
                 <TextField
-                  label='Amount'
-                  value={values.amount}
-                  onChange={handleChange('amount')}
-                  onBlur={handleBlur('amount')}
-                  type='number'
+                  label='Date'
+                  value={values.date}
+                  onChange={handleChange('date')}
+                  onBlur={handleBlur('date')}
+                  type='date'
                   autoComplete='off'
                 />
+
                 <Select
                   label='Category'
                   options={categories}
@@ -93,20 +96,22 @@ const IncomeTracker = () => {
                 />
 
                 <TextField
-                  label='Date'
-                  value={values.date}
-                  onChange={handleChange('date')}
-                  onBlur={handleBlur('date')}
-                  type='date'
-                  autoComplete='off'
-                />
-                <TextField
                   label='Description'
                   value={values.description}
                   onChange={handleChange('description')}
                   onBlur={handleBlur('description')}
                   autoComplete='off'
                 />
+
+                <TextField
+                  label='Amount'
+                  value={values.amount}
+                  onChange={handleChange('amount')}
+                  onBlur={handleBlur('amount')}
+                  type='number'
+                  autoComplete='off'
+                />
+
                 <Button submit variant='primary'>
                   Add Income
                 </Button>
@@ -122,6 +127,8 @@ const IncomeTracker = () => {
         <Text as='h3' variant='headingMd'>
           Income Detail
         </Text>
+
+        <br />
 
         <ResourceList
           resourceName={{ singular: 'income', plural: 'incomes' }}

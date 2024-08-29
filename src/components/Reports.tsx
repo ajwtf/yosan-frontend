@@ -38,6 +38,8 @@ const Reports = () => {
           Income vs. Expense
         </Text>
 
+        <br />
+
         <ResponsiveContainer width='100%' height={300}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray='3 3' />
