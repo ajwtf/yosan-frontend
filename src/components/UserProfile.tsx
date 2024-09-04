@@ -30,7 +30,7 @@ const UserProfile = () => {
 
   return (
     <Page>
-      <Text as={'h1'} variant='headingLg'>
+      <Text as='h1' variant='headingLg'>
         {user.username || 'User Profile'}
       </Text>
 

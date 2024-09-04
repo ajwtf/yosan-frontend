@@ -4,19 +4,20 @@ import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-    Button,
-    Card,
-    FormLayout,
-    Page,
-    ResourceItem,
-    ResourceList,
-    Select,
-    Text,
-    TextField,
+  Button,
+  Card,
+  FormLayout,
+  Page,
+  ResourceItem,
+  ResourceList,
+  Select,
+  Text,
+  TextField,
 } from '@shopify/polaris';
 
 import { RootState } from '../context';
 import { createIncome, getIncomes } from '../context/incomeSlice';
+import { formatCurrency } from '../utils/formatters';
 import { incomeValidationSchema } from '../utils/validators';
 
 const IncomeTracker = () => {
@@ -62,7 +63,7 @@ const IncomeTracker = () => {
         textField={textField}
       /> */}
 
-      <Text as={'h1'} variant='headingLg'>
+      <Text as='h1' variant='headingLg'>
         Income Tracker
       </Text>
 
@@ -165,7 +166,7 @@ const IncomeTracker = () => {
                 <Text as='h5'>{new Date(date).toLocaleDateString()}</Text>
                 <Text as='h5'>Category: {category}</Text>
                 <Text as='h5'>Description: {description}</Text>
-                <Text as='h5'>Amount: {amount}</Text>
+                <Text as='h5'>Amount: {formatCurrency(amount)}</Text>
               </ResourceItem>
             );
           }}

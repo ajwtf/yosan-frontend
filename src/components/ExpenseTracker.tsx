@@ -4,20 +4,21 @@ import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-    Button,
-    Card,
-    DropZone,
-    FormLayout,
-    Page,
-    ResourceItem,
-    ResourceList,
-    Select,
-    Text,
-    TextField,
+  Button,
+  Card,
+  DropZone,
+  FormLayout,
+  Page,
+  ResourceItem,
+  ResourceList,
+  Select,
+  Text,
+  TextField,
 } from '@shopify/polaris';
 
 import { RootState } from '../context';
 import { createExpense, getExpenses } from '../context/expenseSlice';
+import { formatCurrency } from '../utils/formatters';
 import { expenseValidationSchema } from '../utils/validators';
 
 const ExpenseTracker = () => {
@@ -54,7 +55,7 @@ const ExpenseTracker = () => {
 
   return (
     <Page>
-      <Text as={'h1'} variant='headingLg'>
+      <Text as='h1' variant='headingLg'>
         Expense Tracker
       </Text>
 
@@ -181,7 +182,7 @@ const ExpenseTracker = () => {
                 <Text as='h5'>{new Date(date).toLocaleDateString()}</Text>
                 <Text as='h5'>Category: {category}</Text>
                 <Text as='h5'>Description: {description}</Text>
-                <Text as='h5'>Amount: {amount}</Text>
+                <Text as='h5'>Amount: {formatCurrency(amount)}</Text>
               </ResourceItem>
             );
           }}
@@ -192,27 +193,3 @@ const ExpenseTracker = () => {
 };
 
 export default ExpenseTracker;
-
-// const mockExpenseEntries = [
-//   {
-//     id: '1',
-//     amount: '$1500',
-//     category: 'Rent',
-//     date: '2024-08-01',
-//     description: '2024-08-01 Rent',
-//   },
-//   {
-//     id: '2',
-//     amount: '$300',
-//     category: 'Food',
-//     date: '2024-08-02',
-//     description: 'Costco',
-//   },
-//   {
-//     id: '3',
-//     amount: '$4500',
-//     category: 'Touka',
-//     date: '2024-08-12',
-//     description: 'Touka mouth surgery',
-//   },
-// ];

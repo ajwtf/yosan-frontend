@@ -4,10 +4,10 @@ import { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    BrowserRouter as Router,
-    Navigate,
-    Route,
-    Routes,
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
 } from 'react-router-dom';
 
 import { Button, Page } from '@shopify/polaris';
@@ -44,8 +44,6 @@ function App() {
         </Button>
       </Page>
 
-      {/* <NavTab /> */}
-      {/* <Nav /> */}
       {isAuthenticated && <Nav />}
 
       <Routes>

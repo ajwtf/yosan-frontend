@@ -6,7 +6,7 @@ const Landing = () => {
   return (
     <Page>
       <Card>
-        <Text as={'h1'} variant='headingLg'>
+        <Text as='h1' variant='headingLg'>
           Landing
         </Text>
 

@@ -7,6 +7,7 @@ import { Card, DataTable, Link, Page, Text } from '@shopify/polaris';
 import { RootState } from '../context';
 import { getExpenses } from '../context/expenseSlice';
 import { getIncomes } from '../context/incomeSlice';
+import { formatCurrency } from '../utils/formatters';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const Dashboard = () => {
     // ['Income', `$${currentIncome.toLocaleString()}`],
     // ['Expenses', `$${currentExpenses.toLocaleString()}`],
     // ['Balance', `$${balance.toLocaleString()}`],
-    [
+    /* [
       <Link removeUnderline url='/income' key='income'>
         Income
       </Link>,
@@ -44,14 +45,27 @@ const Dashboard = () => {
         Expenses
       </Link>,
       `$ ${currentExpenses.toFixed(2)}`,
+    ], */
+    [
+      'Income',
+      <Link removeUnderline url='/income' key='income'>
+        {formatCurrency(currentIncome)}
+      </Link>,
+    ],
+    [
+      'Expenses',
+      <Link removeUnderline url='/expense' key='expenses'>
+        {formatCurrency(currentExpenses)}
+      </Link>,
     ],
   ];
 
-  const balanceTotal = `$ ${balance.toFixed(2)}`;
+  // const balanceTotal = `$ ${balance.toFixed(2)}`;
+  const balanceTotal = formatCurrency(balance);
 
   return (
     <Page>
-      <Text as={'h1'} variant='headingLg'>
+      <Text as='h1' variant='headingLg'>
         Dashboard
       </Text>
 

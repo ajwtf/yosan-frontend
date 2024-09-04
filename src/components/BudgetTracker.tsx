@@ -4,19 +4,20 @@ import { Form, Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-    Button,
-    Card,
-    FormLayout,
-    Page,
-    ProgressBar,
-    Text,
-    TextField,
+  Button,
+  Card,
+  FormLayout,
+  Page,
+  ProgressBar,
+  Text,
+  TextField,
 } from '@shopify/polaris';
 
 import { RootState } from '../context';
 import { createBudget, getBudget } from '../context/budgetSlice';
 import { getExpenses } from '../context/expenseSlice';
 import { getIncomes } from '../context/incomeSlice';
+import { formatCurrency } from '../utils/formatters';
 import { budgetValidationSchema } from '../utils/validators';
 
 const BudgetTracker = () => {
@@ -66,7 +67,7 @@ const BudgetTracker = () => {
 
   return (
     <Page>
-      <Text as={'h1'} variant='headingLg'>
+      <Text as='h1' variant='headingLg'>
         Budget Tracker
       </Text>
 
@@ -124,13 +125,19 @@ const BudgetTracker = () => {
         <br />
 
         {/* <Text as='h5'>Income Progress</Text> */}
-        <Text as='h5'>Current Income: ${currentIncome}</Text>
+        <Text as='h5' variant='headingXs'>
+          Current Income: {formatCurrency(currentIncome)}
+        </Text>
+
         <ProgressBar progress={incomeProgress} />
 
         <br />
 
         {/* <Text as='h5'>Expense Progress</Text> */}
-        <Text as='h5'>Current Expense: ${currentExpenses}</Text>
+        <Text as='h5' variant='headingXs'>
+          Current Expense: {formatCurrency(currentExpenses)}
+        </Text>
+
         <ProgressBar progress={expenseProgress} />
       </Card>
     </Page>
